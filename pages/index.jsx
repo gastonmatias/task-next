@@ -1,12 +1,15 @@
-import tasksApi from "@/apis/tasksApis"
+import {tasksApi} from "@/apis"
+import { Layout } from "@/components"
 
-export default function TasksPage({ tasks }) {
+export default function HomePage({ tasks }) {
 
     return (
         <>
+        <Layout title='tasks'>
         <div>
             {JSON.stringify(tasks)}
         </div>
+        </Layout>
         </>
     )
 }
