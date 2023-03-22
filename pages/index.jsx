@@ -1,16 +1,23 @@
 import {tasksApi} from "@/apis"
-import { Layout } from "@/components"
+import { Layout, TaskCard } from "@/components"
+import { Grid  } from "@mui/material"
 
 export default function HomePage({ tasks }) {
 
     return (
-        <>
-        <Layout title='tasks'>
-        <div>
-            {JSON.stringify(tasks)}
-        </div>
-        </Layout>
-        </>
+    <>
+    <Layout title='tasks'>
+    <Grid container>
+        {
+            tasks.map((task) => (
+                <Grid item xs={12} sm={6} md={4}>
+                    <TaskCard key={task.id} task={task} />
+                </Grid>
+            ))
+        }
+    </Grid>
+    </Layout>
+    </>
     )
 }
 
