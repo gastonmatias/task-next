@@ -25,7 +25,7 @@ export default function Custom404() {
             underline='none'
           >
             Back to Home
-          </LinkMUI>
+          </LinkMUI> 
         </Box>
       </Box>
       </>
