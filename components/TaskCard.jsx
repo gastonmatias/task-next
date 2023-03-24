@@ -63,7 +63,7 @@ export const TaskCard = ({task, setTasks}) => {
           </Link>
 
           <IconButton aria-label="delete" onClick={()=> handleDelete()}>
-            <DeleteOutlineOutlinedIcon color='warning'/>
+            <DeleteOutlineOutlinedIcon color='error'/>
           </IconButton>
 
           <IconButton aria-label="done">

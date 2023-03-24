@@ -12,7 +12,9 @@ export const Navbar = () => {
     <Box sx={{flexGrow:1}} >
       <AppBar 
         position="static" 
-        color="transparent"
+        // color="warning"
+        // color={#ffab00}
+        // color="transparent"
         // elevation={0}
         >
         <Container maxWidth="xl" sx={{py:1}}>
