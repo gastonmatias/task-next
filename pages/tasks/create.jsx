@@ -1,28 +1,12 @@
-import { tasksApi } from "@/apis"
 import { Layout, TaskForm } from "@/components"
 
-export default function CreateTaskPage({ tasks }) {
+export default function CreateTaskPage() {
 
     return (
         <>
         <Layout title='tasks'>
-        <TaskForm/>
-        
-        
+            <TaskForm />
         </Layout>
         </>
     )
-}
-
-export const getServerSideProps = async (ctx) => {
-    
-    const {data} = await tasksApi.get('/tasks')
-    
-    const tasks = data.tasks
-    
-    return {
-        props: {
-            tasks
-        }
-    }
 }

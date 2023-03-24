@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, Grid, Typography, TextField, Button, Box } from "@mui/material"
 import { tasksApi } from '@/apis';
-// import tasksApi  from '@/apis';
 import { useRouter } from 'next/router';
 
-export const TaskForm = () => {
+export const TaskForm = ({title='', description='', formType='Create Task'}) => {
   
-  // const navigate = useNavigate()
   const router = useRouter()
 
   const [task, setTask] = useState({
-    title:'',
-    description:''
+    title,
+    description
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const resp = await tasksApi.post('/tasks',{task})
-    console.log(resp);
+    
+    //! dependiendo de la ruta actual, se determinará si el form se está
+    //! utilizando para CREAR o ACTUALIZAR un task
+    if (router.pathname==='/tasks/create') {
+      await tasksApi.post('/tasks',{task})
+
+    }
+    else {
+      const {query:{id}} = router
+      const {title, description} = task
+      
+      await tasksApi.put(`/tasks/${id}`,{title, description})
+    }
+    
     router.push('/')
   }
 
@@ -35,7 +45,7 @@ export const TaskForm = () => {
         <Card>
           <CardContent>
             <Typography>
-              Create Task
+              {formType}
             </Typography>
             
             <form onSubmit={handleSubmit}>
@@ -44,18 +54,19 @@ export const TaskForm = () => {
                 onChange={handleChange}
                 value={task.title}
                 variant="filled"
-                label="Write yout title"
-                placeholder="test"
+                label="Write your title"
+                placeholder="Study Next.js"
                 fullWidth
                 sx={{ my: 1}}
-              />
+                />
               
               <TextField
                 name='description'
                 onChange={handleChange}
+                value={task.description}
                 variant="filled"
-                label="Write yout description"
-                placeholder="test"
+                label="Write your description"
+                placeholder="Because create-react-app is dead R.I.P"
                 multiline
                 rows={4}
                 fullWidth

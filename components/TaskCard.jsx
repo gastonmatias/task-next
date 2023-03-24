@@ -1,28 +1,46 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
+import Link from 'next/link';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { IconButton } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DoneOutlineOutlinedIcon from '@mui/icons-material/DoneOutlineOutlined';
 
-export const TaskCard = ({task}) => {
+import { tasksApi } from '@/apis';
+import { confirmAction } from './UI/ConfirmAction';
+
+export const TaskCard = ({task, setTasks}) => {
+
+  const handleDelete = async () => {
+    confirmAction(
+      'Delete Task',
+      'Are You Sure?',
+      deleteTask
+    )
+  }
+    
+  const deleteTask = async() => {
+    await tasksApi.delete(`/tasks/${task.id}`)
+    refreshTasks()
+  }
+
+  const refreshTasks = async () => {
+    const {data} = await tasksApi.get('/tasks')
+    setTasks(data.tasks)
+  }
+
 
   return (
     <>
     <Card variant="outlined" sx={{
       display:'flex',
-      // flexWrap:'wrap', 
       m:1,
-      // maxWidth: '70vw'
+      border: '0.4px dotted white'
     }}>
-      {/* <Card> */}
         <CardContent sx={{flex:'1'}} >
-        {/* <CardContent sx={{ flex: '1 0 auto' }}> */}
           {/*//todo: añadir fecha creacion/update  */}
           {/* <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom> */}
               {/* {task.date} */}
@@ -38,17 +56,20 @@ export const TaskCard = ({task}) => {
         </CardContent>
         
         <CardActions >
-          <IconButton aria-label="add to favorites">
-            <EditOutlinedIcon color='primary'/>
-          </IconButton>
-          <IconButton aria-label="share">
+          <Link href={`/tasks/${task.id}`}>
+            <IconButton aria-label="edit">
+              <EditOutlinedIcon color='primary'/>
+            </IconButton>
+          </Link>
+
+          <IconButton aria-label="delete" onClick={()=> handleDelete()}>
             <DeleteOutlineOutlinedIcon color='warning'/>
           </IconButton>
-          <IconButton aria-label="share">
+
+          <IconButton aria-label="done">
             <DoneOutlineOutlinedIcon color='success'/>
           </IconButton>
         </CardActions>
-    {/* </Box> */}
     </Card>
     </>
 )}
