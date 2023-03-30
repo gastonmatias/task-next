@@ -43,11 +43,11 @@ const createTask = async(req,res) => {
             }
         })
 
-        console.log(newTask);
+        console.log({newTask});
 
         return res.status(201).json({
             message:'Created',
-            task
+            newTask
         })
 
     } catch (err) {

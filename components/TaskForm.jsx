@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Card, CardContent, Grid, Typography, TextField, Button, Box } from "@mui/material"
 import { tasksApi } from '@/apis';
 import { useRouter } from 'next/router';
+import { startCreateTask, startUpdateTask } from '@/store';
+import { useDispatch } from 'react-redux';
 
 export const TaskForm = ({title='', description='', formType='Create Task'}) => {
   
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const [task, setTask] = useState({
     title,
@@ -18,17 +21,18 @@ export const TaskForm = ({title='', description='', formType='Create Task'}) => 
     //! dependiendo de la ruta actual, se determinará si el form se está
     //! utilizando para CREAR o ACTUALIZAR un task
     if (router.pathname==='/tasks/create') {
-      await tasksApi.post('/tasks',{task})
+      dispatch(startCreateTask(task))
+      // await tasksApi.post('/tasks',{task})
 
     }
     else {
       const {query:{id}} = router
       const {title, description} = task
-      
-      await tasksApi.put(`/tasks/${id}`,{title, description})
+      dispatch(startUpdateTask(id,title,description))
+      // await tasksApi.put(`/tasks/${id}`,{title, description})
     }
     
-    router.push('/')
+    // router.push('/')
   }
 
   const handleChange = (e) => {

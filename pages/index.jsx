@@ -1,36 +1,56 @@
-import {  useState, useEffect, useCallback, useMemo } from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
-import { Grid  } from "@mui/material"
+import { Box, Grid  } from "@mui/material"
 
-import {tasksApi} from "@/apis"
 import { Layout, TaskCard } from "@/components"
+import { startLoadingTasks } from "@/store"
 
 export default function HomePage() {
- 
-    const [tasks, setTasks] = useState([]);
+    
+    const {tasks, isLoading} = useSelector(state => state.task)
+    const dispatch = useDispatch()
     
     useEffect(() => {
-        getTasks()
+        dispatch(startLoadingTasks())
     }, []);
+    // }, [tasks.lenght]);
     
-    const getTasks = async ()  => {
-        const {data} = await tasksApi.get('/tasks')
-        setTasks(data.tasks)
-        console.log(tasks);
-    }
-    
+    // useEffect(() => {
+        
+    // }, [tasks]);
+
+    // console.log(isLoading);
+    console.log(tasks);
+
     return (
     <>
     <Layout title='tasks'>
+        {
+            isLoading && 
+            <Box 
+            sx={{
+                display: "flex",
+                alignItems:'center',
+                justifyContent:'center',
+                height:'90vh',
+                width:"90vw",
+            }}>
+                ...L o a d i n g (Spinner soon)
+            </Box>
+        }
+        {
+            !isLoading &&
         <Grid container>
             {
                 tasks.map((task) => (
                     <Grid item key={task.id} xs={12} sm={6} md={4}>
-                        <TaskCard task={task} setTasks={setTasks} tasks={tasks} />
+                        <TaskCard task={task} tasks={tasks} />
                     </Grid>
                 ))
             }
         </Grid>
+        }
     </Layout>
     </>
     )

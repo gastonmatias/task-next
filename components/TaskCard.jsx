@@ -9,30 +9,24 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DoneOutlineOutlinedIcon from '@mui/icons-material/DoneOutlineOutlined';
 
-import { tasksApi } from '@/apis';
 import { confirmAction } from './UI/ConfirmAction';
+import { startDeleteTask } from '@/store';
+import { useDispatch } from 'react-redux';
 
-export const TaskCard = ({task, setTasks}) => {
+export const TaskCard = ({task}) => {
+
+  const dispatch = useDispatch()
 
   const handleDelete = async () => {
     confirmAction(
       'Delete Task',
       'Are You Sure?',
-      deleteTask
+      deleteTask //fx como referencia
     )
   }
     
-  const deleteTask = async() => {
-    await tasksApi.delete(`/tasks/${task.id}`)
-    refreshTasks()
-  }
-
-  const refreshTasks = async () => {
-    const {data} = await tasksApi.get('/tasks')
-    setTasks(data.tasks)
-  }
-
-
+  const deleteTask = () => dispatch(startDeleteTask(task.id))
+  
   return (
     <>
     <Card variant="outlined" sx={{
